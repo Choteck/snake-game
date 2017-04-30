@@ -17,8 +17,10 @@ function start() {
     context.clearRect(0, 0, canvas.width, canvas.height)
     isPaused = false
     length = initialLength
+    foodNumber = 0
+    foodEaten = 0
 
-    setFoodEaten()
+    setScore()
     setSpeed()
     drawSnake()
     drawFood()
@@ -27,8 +29,8 @@ function start() {
     //timer = setInterval(function() { move(direction) }, milliseconds)
 }
 
-function setFoodEaten() {
-    document.getElementById('foodEaten').innerText = length - initialLength
+function setScore() {
+    document.getElementById('foodEaten').innerText = foodEaten
 }
 
 function setStatus(status) {
@@ -58,7 +60,14 @@ function drawSnake() {
 
     if (snakeHead['x'] == foodPosition['x'] && snakeHead['y'] == foodPosition['y']) {
         length++
-        setFoodEaten()
+        if (foodNumber < 5) {
+            foodEaten++
+        } else {
+            clearTimeout(timeFood)
+            foodEaten += 5
+            foodNumber = 0
+        }
+        setScore()
         drawFood()
     }
 }
@@ -72,7 +81,15 @@ function drawFood() {
     if (snake.some(checkFoodPosition))
         drawFood()
     else {
-        context.fillRect(foodPosition['x'], foodPosition['y'], size, size)
+        foodNumber++
+        if (foodNumber < 5) {
+            context.fillRect(foodPosition['x'], foodPosition['y'], size, size)
+        } else {
+            context.fillStyle = "blue"
+            context.fillRect(foodPosition['x'], foodPosition['y'], size, size)
+            timeFood = setTimeout(function() { context.clearRect(foodPosition['x'], foodPosition['y'], size, size), foodNumber = 0, drawFood() }, 5000)
+            context.fillStyle = "black"
+        }
     }
 }
 
@@ -141,7 +158,7 @@ document.onkeydown = function(event) {
     }
     // Decrease Speed
     else if (keyCode == 109 && !isPaused && milliseconds < 100) {
-        milliseconds += 100
+        milliseconds += 10
         speed -= 1
         clearInterval(timer)
         setSpeed()
