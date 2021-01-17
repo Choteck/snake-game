@@ -1,18 +1,11 @@
 #GameBoard {
-    position: center;
-}
-
-#GameBoard #Canvas {
-    padding-left: 0;
-    padding-right: 0;
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
-    border: 3px solid #0095da;
+	position: relative;
+	margin: auto;
+	border-style: solid;
 }
 
 #GameBoard .Block {
-	position: center;
+	position: absolute;
 }
 
 #GameBoard #GameOver {
